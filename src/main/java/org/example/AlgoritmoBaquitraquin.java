@@ -6,62 +6,68 @@ public class AlgoritmoBaquitraquin {
     static boolean solucionEncontrada = false;
 
     public static boolean mudanzaRealizable(int[] pesos) {
-        int[][] asignacionCamiones = new int[camiones][pesos.length];
-        if (backtrackMudanza(pesos, asignacionCamiones, 0)) {
-            System.out.println("Si es posible realizar la mudanza con " + camiones + " camiones");
-            System.out.println("El reparto de los objetos en los " + camiones + " camiones es:");
-            for (int i = 0; i < asignacionCamiones.length; i++) {
-                System.out.print("Camión " + (i + 1) + ": ");
-                for (int j = 0; j < asignacionCamiones[i].length; j++) {
-                    if (asignacionCamiones[i][j] != 0) {
-                        System.out.print(asignacionCamiones[i][j] + " ");
-                    }
-                }
-                System.out.println();
+        int[] solucion = new int[pesos.length];
+        for (int i = 0; i < solucion.length; i++) {
+            solucion[i] = -1;
+        }
+        if (backtrackMudanza(pesos, solucion, 0)) {
+            System.out.println("Si es posible realizar la mudanza con 3 camiones");
+            System.out.println("El reparto de los objetos en los 3 camiones es:");
+            for (int i = 0; i < solucion.length; i++) {
+                System.out.print((solucion[i]+1) + ", ");
             }
+            System.out.println();
             return true;
         } else {
-            System.out.println("No es posible realizar la mudanza con " + camiones + " camiones");
+            System.out.println("No es posible realizar la mudanza con 3 camiones");
             return false;
         }
     }
 
-    public static boolean backtrackMudanza(int[] pesos, int[][] asignacionActual, int indiceObjeto) {
+    public static boolean backtrackMudanza(int[] pesos, int[] solucion, int indiceObjeto) {
         if (indiceObjeto == pesos.length) {
-            return validarAsignacion(asignacionActual);
+            return validarAsignacion(pesos, solucion);
         }
 
         for (int i = 0; i < camiones; i++) {
-            if (esNodoVivo(pesos, asignacionActual, indiceObjeto, i)) {
-                asignacionActual[i][indiceObjeto] = pesos[indiceObjeto];
-                if (backtrackMudanza(pesos, asignacionActual, indiceObjeto + 1)) {
+            if (esNodoVivo(pesos, solucion, indiceObjeto,i)) {
+                solucion[indiceObjeto] = i;
+                if (backtrackMudanza(pesos, solucion, indiceObjeto + 1)) {
                     return true;
                 }
-                asignacionActual[i][indiceObjeto] = 0;
+                solucion[indiceObjeto] = -1;
             }
         }
         return false;
     }
 
-    public static boolean esNodoVivo(int[] pesos, int[][] asignacionActual, int indiceObjeto, int camion) {
-        int suma = 0;
+    public static boolean esNodoVivo(int[] pesos, int[] solucion, int indiceObjeto, int camion) {
+        int suma1 = 0;
         for (int j = 0; j < indiceObjeto; j++) {
-            suma += asignacionActual[camion][j];
-        }
-        return (suma + pesos[indiceObjeto]) <= capacidadMax;
+            if (solucion[j] == camion) {
+                suma1 += pesos[j];
+            }
+
+        }return ((suma1 + pesos[indiceObjeto]) <= capacidadMax);
     }
 
-    public static boolean validarAsignacion(int[][] asignacionActual) {
-        for (int i = 0; i < camiones; i++) {
-            int suma = 0;
-            for (int j = 0; j < asignacionActual[i].length; j++) {
-                suma += asignacionActual[i][j];
+    public static boolean validarAsignacion (int[] pesos, int[] solucion){
+        int sumaf1 = 0;
+        int sumaf2 = 0;
+        int sumaf3 = 0;
+
+        for (int i = 0; i < solucion.length; i++) {
+            if (solucion[i] == 0) {
+                sumaf1 += pesos[i];
+            } else if (solucion[i] == 1) {
+                sumaf2 += pesos[i];
+            } else if (solucion[i] == 2) {
+                sumaf3 += pesos[i];
             }
-            if (suma > capacidadMax) {
+            if (sumaf1 > capacidadMax || sumaf2 > capacidadMax || sumaf3 > capacidadMax) {
                 return false;
             }
         }
         return true;
     }
 }
-
