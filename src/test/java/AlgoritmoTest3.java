@@ -25,10 +25,15 @@ public class AlgoritmoTest3 {
 
     @Test
     public void testAlgoritmo4() {
-        int[] pesos5 = {19000, 10000, 70, 1000, 9700, 20000};
+        int[] pesos5 = new int[] {19000, 10000, 70, 1000, 9700, 20000};
         assertTrue(AlgoritmoBaquitraquin.mudanzaRealizable(pesos5));
     }
 
+    @Test
+    public void testAlgortimo5() {
+        int[] pesos6 = new int[] {1500, 1970, 333, 67, 4000, 1200, 300, 5000, 2400, 900, 8000, 6000, 5000, 4500, 6500, 2500, 5000, 5600};
+        assertTrue(AlgoritmoBaquitraquin.mudanzaRealizable(pesos6));
+    }
 
 }
 
